@@ -9,9 +9,6 @@ class AbstractJSONEncoder(object):
 
 class FilterJSONEncoder(json.JSONEncoder):
 
-    def __init__(self):
-        json.JSONEncoder.__init__(self)
-
     def default(self, obj):
         if isinstance(obj, AbstractJSONEncoder):
             return obj.decodeJson()
