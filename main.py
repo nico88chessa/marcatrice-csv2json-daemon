@@ -9,8 +9,14 @@ if __name__ == "__main__":
     # converter.start()
     # converter.join()
 
-    eventHandler = CustomEventHandler()
+    watchedDogPath = "C:\\Users\\nicola\\Desktop"
+    destinationPath = "C:\\Users\\nicola\\Desktop"
+    # eventHandler = CustomEventHandler(watchedDogPath)
+    eventHandler = CustomEventHandler(watchedDogPath, destinationPath)
     obs = Observer()
-    obs.schedule(eventHandler, "C:\\Users\\nicola\\Desktop")
-    obs.start()
-    obs.join()
+    try:
+        obs.schedule(eventHandler, watchedDogPath)
+        obs.start()
+        obs.join()
+    except FileNotFoundError as fnfEx:
+        print("Path di osservazione non trovata")

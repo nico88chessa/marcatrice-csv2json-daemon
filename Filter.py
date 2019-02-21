@@ -43,8 +43,8 @@ class Filter(MyJSONEncoder.AbstractJSONEncoder):
     def decodeJson(self):
         ret = {
             "NumberOfPoints": self.getNumberOfPoints(),
-            "Max": self.getMax(),
             "Min": self.getMin(),
+            "Max": self.getMax(),
             "Coordinate": self.getPointList()
         }
         return ret

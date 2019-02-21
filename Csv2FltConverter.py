@@ -1,30 +1,43 @@
 from Point import Point
 from Filter import Filter
 from os import path
-from threading import Thread
+# from threading import Thread
 import os
 import json
 import MyJSONEncoder
 
 
-class Csv2FltConverter(Thread):
+class PathNotFoundException(Exception):
+    def __init__(self, filePath):
+        self.path = filePath
 
-    def __init__(self, path, destinationPath = ""):
-        Thread.__init__(self)
-        self.filePath = path
-        self.destinationPath = destinationPath
 
-    def run(self):
+class Csv2FltConverter(object):
 
-        print("Path:", self.filePath)
+    # def __init__(self, path, destinationPath = ""):
+    #     Thread.__init__(self)
+    #     self.filePath = path
+    #     self.destinationPath = destinationPath
 
-        if not path.exists(self.filePath):
-            print("Path" + self.filePath + "non esiste")
-            return
+    def __init__(self):
+        pass
 
-        base, ext = path.splitext(self.filePath)
-        folder = path.split(self.filePath)[0]
-        fileName = path.split(self.filePath)[1]
+    def execute(self, filePath, destinationPath=""):
+
+
+        print("Path:", filePath)
+
+        if not path.exists(filePath):
+            raise PathNotFoundException(filePath)
+        if not path.exists(destinationPath):
+            raise PathNotFoundException(destinationPath)
+
+        base, ext = path.splitext(filePath)
+        folder = path.split(filePath)[0]
+        fileName = path.split(filePath)[1]
+
+        if destinationPath == "":
+            destinationPath = folder
 
         if ext != ".csv":
             return
@@ -33,11 +46,12 @@ class Csv2FltConverter(Thread):
         points = []
         maxPoint = Point()
         minPoint = Point()
+        count = 0
         # coordSize = 0
 
-        with open(self.filePath) as f:
+        with open(filePath) as f:
 
-            print("Apertura file in lettura: " + self.filePath)
+            print("Apertura file in lettura: " + filePath)
 
             firstLine = f.readline().strip()
             coordStr, coordSize = firstLine.split(':')
@@ -53,6 +67,7 @@ class Csv2FltConverter(Thread):
                 print("Errore parsing: file vuoto")
                 return
 
+            count += 1
             f.readline()
             f.readline()
 
@@ -78,9 +93,11 @@ class Csv2FltConverter(Thread):
                 if p > maxPoint:
                     maxPoint = p
                 points.append(p)
+                count += 1
 
         points.sort()
-        currentFilter.setNumberOfPoints(coordSize)
+        # currentFilter.setNumberOfPoints(coordSize)
+        currentFilter.setNumberOfPoints(count)
         currentFilter.setMin(minPoint)
         currentFilter.setMax(maxPoint)
         currentFilter.setPointList(points)
@@ -90,13 +107,9 @@ class Csv2FltConverter(Thread):
         print("Punto Min: " + str(minPoint.getX()) + "; " + str(minPoint.getY()))
 
         # print(json.dumps(currentFilter, cls=MyJSONEncoder.FilterJSONEncoder, indent=0))
-        if self.destinationPath == "":
-            outputJsonPath = folder
-        else:
-            outputJsonPath = self.destinationPath
 
-        outputJsonFile = outputJsonPath+"\\"+fileName
-        tempOutputJsonFile = outputJsonPath+"\\~"+fileName
+        outputJsonFile = destinationPath+"\\"+fileName
+        tempOutputJsonFile = destinationPath+"\\~"+fileName
         outputJsonFile = outputJsonFile.replace(".csv", ".json")
         tempOutputJsonFile = tempOutputJsonFile.replace(".csv", ".json")
 
