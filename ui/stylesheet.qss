@@ -1,0 +1,78 @@
+QMainWindow {
+	background-color: white;
+}
+
+.MDLineEdit {
+    qproperty-labelFocusColor: rgba(46, 125, 50, 87%);
+    background-color: transparent;
+    border-bottom-color: rgba(0, 0, 0, 42%);
+    color: rgba(0, 0, 0, 54%);
+}
+
+.MDLineEdit:hover {
+    border-bottom-color: rgba(0, 0, 120, 87%);
+}
+
+.MDLineEdit:focus:!read-only {
+    color: rgba(0, 0, 0, 87%);
+    border-bottom-color: rgba(46, 125, 50, 100%);
+}
+
+.MDLineEdit:disabled {
+    color: rgba(0, 0, 0, 38%);
+    border-bottom-color: rgba(0, 0, 0, 42%);
+}
+
+.MDLineEdit {
+    font-size: 16px;
+    padding: 36px 0px 8px;
+    max-height: 54px;
+    min-height: 18px;
+    margin: 0px 12px 8px;
+    qproperty-labelX: 14;
+    qproperty-labelY: 28;
+    qproperty-labelTextWidth: 12;
+    border: none;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+
+.MDLineEdit:focus {
+    padding: 36px 0px 7px;
+    border-bottom-width: 2px;
+}
+
+.MDLineEdit:read-only {
+    padding: 36px 0px 8px;
+    border-bottom-width: 1px;
+}
+
+.MDLineEdit:disabled {
+    padding: 36px 0px 7px;
+    border-bottom-width: 1px;
+    border-bottom-style: dotted;
+}
+
+QPushButton {
+    padding: 0px 36px;
+    margin: 6px 8px;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 2px;
+    min-width: 64px;
+    min-height: 32px;
+    max-height: 32px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.QPushButton {
+    qproperty-focusPolicy: NoFocus;
+    border-color: transparent;
+    color: white;
+    background-color: green;
+}
+
+.QPushButton::on {
+    color: red;
+}

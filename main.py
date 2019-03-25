@@ -1,20 +1,31 @@
 from CustomEventHandler import CustomEventHandler
 from watchdog.observers import Observer
+from ui import MainWindow
+from PySide2 import QtCore, QtWidgets, QtGui
 
 
 if __name__ == "__main__":
-    print("Avvio test main")
 
-    # converter = Csv2FltConverter("C:\\Users\\nicola\\Desktop\\15x15-tile15p5-um-d.csv")
-    # converter.start()
-    # converter.join()
+    app = QtWidgets.QApplication([])
+    mainWindow = MainWindow.MainWindow()
+    mainWindow.show()
+    app.exec_()
 
-    watchedDogPath = "C:\\Users\\nicola\\Desktop\\Spool"
-    eventHandler = CustomEventHandler(watchedDogPath)
-    obs = Observer()
-    try:
-        obs.schedule(eventHandler, watchedDogPath, recursive=True)
-        obs.start()
-        obs.join()
-    except FileNotFoundError as fnfEx:
-        print("Path di osservazione non trovata")
+# if __name__ == "__main__":
+#     print("Avvio test main")
+#
+#     # converter = Csv2FltConverter("C:\\Users\\nicola\\Desktop\\15x15-tile15p5-um-d.csv")
+#     # converter.start()
+#     # converter.join()
+#
+#     watchedDogPath = "C:\\Users\\nicola\\Desktop"
+#     destinationPath = "C:\\Users\\nicola\\Desktop"
+#     # eventHandler = CustomEventHandler(watchedDogPath)
+#     eventHandler = CustomEventHandler(watchedDogPath, destinationPath)
+#     obs = Observer()
+#     try:
+#         obs.schedule(eventHandler, watchedDogPath)
+#         obs.start()
+#         obs.join()
+#     except FileNotFoundError as fnfEx:
+#         print("Path di osservazione non trovata")

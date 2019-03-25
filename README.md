@@ -7,6 +7,7 @@ Rispetto al file csv, il file json introduce:
 - Punto minimo
 - Coordinate di punti ordinate
 
-Nota:p
-per utilizzare il progetto, e' necessario installare il pacchetto python watchdog:
-pip install watchdog
+Nota: si consiglia di utilizzare un ambiente di python virtuale (venv per esempio)
+per utilizzare il progetto, e' necessario installare:
+- watchdog: pip install watchdog
+- pyside: pip install PySide2
