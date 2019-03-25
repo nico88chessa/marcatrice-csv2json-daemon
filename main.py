@@ -9,13 +9,11 @@ if __name__ == "__main__":
     # converter.start()
     # converter.join()
 
-    watchedDogPath = "C:\\Users\\nicola\\Desktop"
-    destinationPath = "C:\\Users\\nicola\\Desktop"
-    # eventHandler = CustomEventHandler(watchedDogPath)
-    eventHandler = CustomEventHandler(watchedDogPath, destinationPath)
+    watchedDogPath = "C:\\Users\\nicola\\Desktop\\Spool"
+    eventHandler = CustomEventHandler(watchedDogPath)
     obs = Observer()
     try:
-        obs.schedule(eventHandler, watchedDogPath)
+        obs.schedule(eventHandler, watchedDogPath, recursive=True)
         obs.start()
         obs.join()
     except FileNotFoundError as fnfEx:

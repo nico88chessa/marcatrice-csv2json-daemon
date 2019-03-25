@@ -8,10 +8,9 @@ import time
 
 class CustomEventHandler(FileSystemEventHandler):
 
-    def __init__(self, watchedPath, destinationPath=""):
+    def __init__(self, watchedPath):
         FileSystemEventHandler.__init__(self)
         self.watchedPath = watchedPath
-        self.destinationPath = destinationPath
 
     def on_created(self, event):
 
@@ -69,8 +68,9 @@ class CustomEventHandler(FileSystemEventHandler):
         #     dstPath += subFolderName
 
         converter = Csv2FltConverter()
+        destinationPath = path.dirname(filename)
         try:
-            converter.execute(filename, self.destinationPath)
+            converter.execute(filename, destinationPath)
         except PathNotFoundException as pnfEx:
             print("Path non trovata: " + pnfEx.path)
 

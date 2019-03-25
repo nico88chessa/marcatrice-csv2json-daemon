@@ -118,13 +118,11 @@ class Csv2FltConverter(object):
 
         print("Inizio creazione file json...")
 
-        tfo = open(tempOutputJsonFile, "w")
-        with open(outputJsonFile, 'w') as outfile:
+        with open(tempOutputJsonFile, 'w') as outfile:
             json.dump(currentFilter, outfile, indent=4, separators=(',', ': '), cls=MyJSONEncoder.FilterJSONEncoder)
 
         print("Creazione file json completata.")
 
-        tfo.close()
-        os.remove(tempOutputJsonFile)
+        os.rename(tempOutputJsonFile, outputJsonFile)
 
         print("Chiusura json file")
