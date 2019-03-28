@@ -1,10 +1,10 @@
 from Point import Point
 from Filter import Filter
 from os import path
-# from threading import Thread
 import os
 import json
 import MyJSONEncoder
+from Logger import Logger
 
 
 class PathNotFoundException(Exception):
@@ -14,18 +14,12 @@ class PathNotFoundException(Exception):
 
 class Csv2FltConverter(object):
 
-    # def __init__(self, path, destinationPath = ""):
-    #     Thread.__init__(self)
-    #     self.filePath = path
-    #     self.destinationPath = destinationPath
-
     def __init__(self):
         pass
 
     def execute(self, filePath, destinationPath=""):
 
-
-        print("Path:", filePath)
+        Logger().info("Path file: " + filePath)
 
         if not path.exists(filePath):
             raise PathNotFoundException(filePath)
@@ -49,51 +43,58 @@ class Csv2FltConverter(object):
         count = 0
         # coordSize = 0
 
-        with open(filePath) as f:
+        try:
+            with open(filePath) as f:
 
-            print("Apertura file in lettura: " + filePath)
+                Logger().info("Apertura file in lettura: " + filePath)
 
-            firstLine = f.readline().strip()
-            coordStr, coordSize = firstLine.split(':')
-            coordStr = coordStr.strip()
+                firstLine = f.readline().strip()
+                coordStr, coordSize = firstLine.split(':')
+                coordStr = coordStr.strip()
 
-            if coordStr != "Coordinates":
-                print("Errore parsing: campo 'Coordinates' non trovato")
-                return
+                if coordStr != "Coordinates":
+                    Logger().error("Errore parsing: campo 'Coordinates' non trovato")
+                    return
 
-            coordSize = int(coordSize.strip())
+                coordSize = int(coordSize.strip())
 
-            if coordSize == 0:
-                print("Errore parsing: file vuoto")
-                return
+                if coordSize == 0:
+                    Logger().error("Errore parsing: file vuoto")
+                    return
 
-            count += 1
-            f.readline()
-            f.readline()
+                count += 1
+                f.readline()
+                f.readline()
 
-            # leggo il primo numero
-            line = f.readline()
-            values = line.split(';')
-            x = int(values[0].strip())
-            y = int(values[1].strip())
-            maxPoint.setX(x)
-            maxPoint.setY(y)
-            minPoint.setX(x)
-            minPoint.setY(y)
-
-            points.append(maxPoint)
-
-            for line in f:
+                # leggo il primo numero
+                line = f.readline()
                 values = line.split(';')
                 x = int(values[0].strip())
                 y = int(values[1].strip())
-                p = Point(x, y)
-                if p < minPoint:
-                    minPoint = p
-                if p > maxPoint:
-                    maxPoint = p
-                points.append(p)
-                count += 1
+                maxPoint.setX(x)
+                maxPoint.setY(y)
+                minPoint.setX(x)
+                minPoint.setY(y)
+
+                points.append(maxPoint)
+
+                for line in f:
+                    values = line.split(';')
+                    x = int(values[0].strip())
+                    y = int(values[1].strip())
+                    p = Point(x, y)
+                    if p < minPoint:
+                        minPoint = p
+                    if p > maxPoint:
+                        maxPoint = p
+                    points.append(p)
+                    count += 1
+
+        except OSError as err:
+            Logger().error("Errore controllo file")
+            Logger().error("Codice errore: " + str(err.errno))
+            Logger().error("Descrizione errore: " + err.strerror)
+            return
 
         points.sort()
         # currentFilter.setNumberOfPoints(coordSize)
@@ -102,27 +103,24 @@ class Csv2FltConverter(object):
         currentFilter.setMax(maxPoint)
         currentFilter.setPointList(points)
 
-        print("Numero punti: " + str(coordSize))
-        print("Punto Max: " + str(maxPoint.getX()) + "; " + str(maxPoint.getY()))
-        print("Punto Min: " + str(minPoint.getX()) + "; " + str(minPoint.getY()))
-
-        # print(json.dumps(currentFilter, cls=MyJSONEncoder.FilterJSONEncoder, indent=0))
+        Logger().info("Numero punti: " + str(coordSize))
+        Logger().info("Punto Max: " + str(maxPoint.getX()) + "; " + str(maxPoint.getY()))
+        Logger().info("Punto Min: " + str(minPoint.getX()) + "; " + str(minPoint.getY()))
 
         outputJsonFile = destinationPath+"\\"+fileName
         tempOutputJsonFile = destinationPath+"\\~"+fileName
         outputJsonFile = outputJsonFile.replace(".csv", ".json")
         tempOutputJsonFile = tempOutputJsonFile.replace(".csv", ".json")
 
-        print("Percorso generazione file: ", outputJsonFile)
-        print("Percorso generazione file temp: ", tempOutputJsonFile)
-
-        print("Inizio creazione file json...")
+        Logger().info("Percorso generazione file: " + outputJsonFile)
+        Logger().info("Percorso generazione file temp: " + tempOutputJsonFile)
+        Logger().info("Inizio creazione file json")
 
         with open(tempOutputJsonFile, 'w') as outfile:
             json.dump(currentFilter, outfile, indent=4, separators=(',', ': '), cls=MyJSONEncoder.FilterJSONEncoder)
 
-        print("Creazione file json completata.")
+        Logger().info("File json temporaneo creato")
 
         os.rename(tempOutputJsonFile, outputJsonFile)
 
-        print("Chiusura json file")
+        Logger().info("File json creato")

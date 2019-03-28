@@ -20,6 +20,8 @@ class Settings(metaclass=Singleton):
             config = configparser.ConfigParser()
             config["Constants"] = {
                 "styleSheetPath": "./ui/stylesheet.qss",
+                "tailerRefreshTimeMs": "500",
+                "spoolPath": "C:\\Users\\nicola\\Desktop\\Spool"
             }
             config["Logging"] = {
                 "path": QStandardPaths.writableLocation(QStandardPaths.AppLocalDataLocation)+"/DV/CSV2JSON/logs/",
@@ -34,6 +36,8 @@ class Settings(metaclass=Singleton):
         config.read(filepath)
 
         self.styleSheetPath = config["Constants"]["styleSheetPath"]
+        self.tailerRefreshTimeMs = config["Constants"]["tailerRefreshTimeMs"]
+        self.spoolPath = config["Constants"]["spoolPath"]
         self.loggingPath = config["Logging"]["path"]
         self.loggingFilename = config["Logging"]["filename"]
         self.loggingLevels = config["Logging"]["levels"]
@@ -41,6 +45,12 @@ class Settings(metaclass=Singleton):
 
     def getStyleSheetPath(self):
         return self.styleSheetPath
+
+    def getTailerRefreshTimeMs(self):
+        return self.tailerRefreshTimeMs
+
+    def getSpoolPath(self):
+        return self.spoolPath
 
     def getLoggingPath(self):
         return self.loggingPath
