@@ -36,11 +36,18 @@ class Csv2FltConverter(object):
         if ext != ".csv":
             return
 
+        outputJsonFile = destinationPath + "\\" + fileName
+        outputJsonFile = outputJsonFile.replace(".csv", ".json")
+
+        if os.path.exists(outputJsonFile):
+            Logger().info("Il file " + outputJsonFile + " esiste gia'")
+            return
+
         currentFilter = Filter()
         points = []
         maxPoint = Point()
         minPoint = Point()
-        count = 0
+        # count = 0
         # coordSize = 0
 
         try:
@@ -49,23 +56,28 @@ class Csv2FltConverter(object):
                 Logger().info("Apertura file in lettura: " + filePath)
 
                 firstLine = f.readline().strip()
-                coordStr, coordSize = firstLine.split(':')
-                coordStr = coordStr.strip()
-
-                if coordStr != "Coordinates":
-                    Logger().error("Errore parsing: campo 'Coordinates' non trovato")
-                    return
-
-                coordSize = int(coordSize.strip())
-
-                if coordSize == 0:
-                    Logger().error("Errore parsing: file vuoto")
-                    return
-
-                count += 1
-                f.readline()
-                f.readline()
-
+                if firstLine.startswith("Coordinates"):
+                    f.readline()
+                    f.readline()
+                else:
+                    f.readline()
+                    # coordStr, coordSize = firstLine.split(':')
+                    # coordStr = coordStr.strip()
+                    #
+                    # if coordStr != "Coordinates":
+                    #     Logger().error("Errore parsing: campo 'Coordinates' non trovato")
+                    #     return
+                    #
+                    # coordSize = int(coordSize.strip())
+                    #
+                    # if coordSize == 0:
+                    #     Logger().error("Errore parsing: file vuoto")
+                    #     return
+                    #
+                # count += 1
+                # f.readline()
+                # f.readline()
+                #
                 # leggo il primo numero
                 line = f.readline()
                 values = line.split(';')
@@ -88,28 +100,30 @@ class Csv2FltConverter(object):
                     if p > maxPoint:
                         maxPoint = p
                     points.append(p)
-                    count += 1
+                    # count += 1
 
         except OSError as err:
             Logger().error("Errore controllo file")
             Logger().error("Codice errore: " + str(err.errno))
             Logger().error("Descrizione errore: " + err.strerror)
             return
+        except Exception as err:
+            Logger().error("Errore generico: il file csv potrebbe essere corrotto")
+            return
 
         points.sort()
         # currentFilter.setNumberOfPoints(coordSize)
-        currentFilter.setNumberOfPoints(count)
+        currentFilter.setNumberOfPoints(len(points))
         currentFilter.setMin(minPoint)
         currentFilter.setMax(maxPoint)
         currentFilter.setPointList(points)
 
-        Logger().info("Numero punti: " + str(coordSize))
+        Logger().info("Numero punti: " + str(len(points)))
         Logger().info("Punto Max: " + str(maxPoint.getX()) + "; " + str(maxPoint.getY()))
         Logger().info("Punto Min: " + str(minPoint.getX()) + "; " + str(minPoint.getY()))
 
-        outputJsonFile = destinationPath+"\\"+fileName
+
         tempOutputJsonFile = destinationPath+"\\~"+fileName
-        outputJsonFile = outputJsonFile.replace(".csv", ".json")
         tempOutputJsonFile = tempOutputJsonFile.replace(".csv", ".json")
 
         Logger().info("Percorso generazione file: " + outputJsonFile)

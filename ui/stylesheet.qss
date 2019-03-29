@@ -1,5 +1,11 @@
 QMainWindow {
 	background-color: white;
+    min-width: 800px;
+    min-height: 600px;
+}
+
+.QLabel {
+    font-size: 16px;
 }
 
 .MDLineEdit {
@@ -28,8 +34,7 @@ QMainWindow {
     padding: 36px 0px 8px;
     max-height: 54px;
     min-height: 18px;
-    margin: 0px 12px 8px;
-    qproperty-labelX: 14;
+    qproperty-labelX: 8;
     qproperty-labelY: 28;
     qproperty-labelTextWidth: 12;
     border: none;
@@ -53,9 +58,8 @@ QMainWindow {
     border-bottom-style: dotted;
 }
 
-QPushButton {
-    padding: 0px 36px;
-    margin: 6px 8px;
+.QPushButton {
+    padding: 0px 16px;
     border-width: 1px;
     border-style: solid;
     border-radius: 2px;
@@ -75,4 +79,30 @@ QPushButton {
 
 .QPushButton::on {
     color: red;
+}
+
+.QCheckBox {
+    font-size: 16px;
+    padding: 8px 0px 8px;
+    color: black;
+    spacing: 32;
+}
+
+.QCheckBox:indicator {
+
+}
+
+.QPlainTextEdit {
+    font-size: 12px;
+    font-family: Consolas;
+    background-color: black;
+    color: white;
+}
+
+.QFrame {
+    margin: 8px;
+}
+
+.QFrame > QWidget {
+    margin: 8px;
 }

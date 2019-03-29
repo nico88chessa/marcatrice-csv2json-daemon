@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file '.\ui\MainWindow.ui',
 # licensing of '.\ui\MainWindow.ui' applies.
 #
-# Created: Wed Mar 27 15:03:22 2019
+# Created: Fri Mar 29 09:15:22 2019
 #      by: pyside2-uic  running on PySide2 5.12.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -28,12 +28,17 @@ class Ui_MainWindow(object):
         self.gridLayout_2.setSpacing(0)
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.cbIsRunning = QtWidgets.QCheckBox(self.content)
-        self.cbIsRunning.setText("")
-        self.cbIsRunning.setObjectName("cbIsRunning")
-        self.gridLayout_2.addWidget(self.cbIsRunning, 1, 1, 1, 1)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout_2.addItem(spacerItem, 1, 0, 1, 1)
+        self.gridLayout_2.addItem(spacerItem, 2, 1, 2, 1)
+        self.cbConverter = QtWidgets.QCheckBox(self.content)
+        self.cbConverter.setObjectName("cbConverter")
+        self.gridLayout_2.addWidget(self.cbConverter, 2, 0, 1, 1)
+        self.cbLogger = QtWidgets.QCheckBox(self.content)
+        self.cbLogger.setObjectName("cbLogger")
+        self.gridLayout_2.addWidget(self.cbLogger, 3, 0, 1, 1)
+        self.pteEditor = QtWidgets.QPlainTextEdit(self.content)
+        self.pteEditor.setObjectName("pteEditor")
+        self.gridLayout_2.addWidget(self.pteEditor, 4, 0, 1, 3)
         self.leSourcePath = MDLineEdit(self.content)
         self.leSourcePath.setStyleSheet("")
         self.leSourcePath.setProperty("labelX", 14)
@@ -42,10 +47,7 @@ class Ui_MainWindow(object):
         self.leSourcePath.setProperty("labelColor", QtGui.QColor(0, 0, 0))
         self.leSourcePath.setProperty("labelFocusColor", QtGui.QColor(46, 125, 50, 87))
         self.leSourcePath.setObjectName("leSourcePath")
-        self.gridLayout_2.addWidget(self.leSourcePath, 0, 0, 1, 2)
-        self.pteEditor = QtWidgets.QPlainTextEdit(self.content)
-        self.pteEditor.setObjectName("pteEditor")
-        self.gridLayout_2.addWidget(self.pteEditor, 2, 0, 1, 2)
+        self.gridLayout_2.addWidget(self.leSourcePath, 1, 0, 1, 2)
         self.gridLayout.addWidget(self.content, 0, 0, 1, 1)
         self.bottom = QtWidgets.QFrame(self.wMain)
         self.bottom.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -74,9 +76,12 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QtWidgets.QApplication.translate("MainWindow", "Csv2Json Converter", None, -1))
+        self.cbConverter.setText(QtWidgets.QApplication.translate("MainWindow", "Converter is running", None, -1))
+        self.cbLogger.setText(QtWidgets.QApplication.translate("MainWindow", "Logger is running", None, -1))
         self.leSourcePath.setProperty("label", QtWidgets.QApplication.translate("MainWindow", "Source Path", None, -1))
         self.pbStyle.setText(QtWidgets.QApplication.translate("MainWindow", "Style", None, -1))
         self.pbStart.setText(QtWidgets.QApplication.translate("MainWindow", "Start", None, -1))
         self.pbStop.setText(QtWidgets.QApplication.translate("MainWindow", "Stop", None, -1))
 
 from ui.MDLineEdit import MDLineEdit
+from ui import resource_rc

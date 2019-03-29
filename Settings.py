@@ -23,6 +23,10 @@ class Settings(metaclass=Singleton):
                 "tailerRefreshTimeMs": "500",
                 "spoolPath": "C:\\Users\\nicola\\Desktop\\Spool"
             }
+            config["Configuration"] = {
+                "styleButtonVisible": "0",
+                "maxLogRowCount": "10"
+            }
             config["Logging"] = {
                 "path": QStandardPaths.writableLocation(QStandardPaths.AppLocalDataLocation)+"/DV/CSV2JSON/logs/",
                 "filename": "CSV2JSON.txt",
@@ -37,6 +41,8 @@ class Settings(metaclass=Singleton):
 
         self.styleSheetPath = config["Constants"]["styleSheetPath"]
         self.tailerRefreshTimeMs = config["Constants"]["tailerRefreshTimeMs"]
+        self.styleButtonVisible = config["Configuration"]["styleButtonVisible"]
+        self.maxLogRowCount = config["Configuration"]["maxLogRowCount"]
         self.spoolPath = config["Constants"]["spoolPath"]
         self.loggingPath = config["Logging"]["path"]
         self.loggingFilename = config["Logging"]["filename"]
@@ -51,6 +57,12 @@ class Settings(metaclass=Singleton):
 
     def getSpoolPath(self):
         return self.spoolPath
+
+    def isStyleButtonVisible(self):
+        return int(self.styleButtonVisible)!=0
+
+    def getMaxLogRowCount(self):
+        return int(self.maxLogRowCount)
 
     def getLoggingPath(self):
         return self.loggingPath
