@@ -88,9 +88,8 @@ class Csv2FltConverter(object):
         currentFilter.setPointList(set.points)
 
         Logger().info("Numero punti: " + str(currentFilter.getNumberOfPoints()))
-        Logger().info("Punto Min: " + str(currentFilter.getMin().getX()) + "; " + str(currentFilter.getMin().getY()))
-        Logger().info("Punto Max: " + str(currentFilter.getMax().getX()) + "; " + str(currentFilter.getMax().getY()))
-
+        Logger().info("BoundingBox - Min: " + str(currentFilter.getMin().getX()) + "; " + str(currentFilter.getMin().getY()))
+        Logger().info("BoundingBox - Max: " + str(currentFilter.getMax().getX()) + "; " + str(currentFilter.getMax().getY()))
 
         tempOutputJsonFile = destinationPath+"\\~"+fileName
         tempOutputJsonFile = tempOutputJsonFile.replace(".csv", ".json")
