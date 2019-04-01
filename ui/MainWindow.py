@@ -168,9 +168,11 @@ class Tailer(QObject):
 
     @Slot()
     def processFile(self):
-        line = self.fp.readline()
-        if line:
-            self.newLineSignal.emit(line.strip())
+        newLines = str()
+        for line in self.fp:
+            newLines += line
+        if len(newLines)>0:
+            self.newLineSignal.emit(newLines.strip())
         else:
             time.sleep(self.waitTimeSec)
 

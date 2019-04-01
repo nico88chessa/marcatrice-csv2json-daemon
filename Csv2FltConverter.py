@@ -5,6 +5,7 @@ import os
 import json
 import MyJSONEncoder
 from Logger import Logger
+from PointSet import PointSet
 
 
 class PathNotFoundException(Exception):
@@ -44,11 +45,7 @@ class Csv2FltConverter(object):
             return
 
         currentFilter = Filter()
-        points = []
-        maxPoint = Point()
-        minPoint = Point()
-        # count = 0
-        # coordSize = 0
+        set = PointSet()
 
         try:
             with open(filePath) as f:
@@ -61,46 +58,15 @@ class Csv2FltConverter(object):
                     f.readline()
                 else:
                     f.readline()
-                    # coordStr, coordSize = firstLine.split(':')
-                    # coordStr = coordStr.strip()
-                    #
-                    # if coordStr != "Coordinates":
-                    #     Logger().error("Errore parsing: campo 'Coordinates' non trovato")
-                    #     return
-                    #
-                    # coordSize = int(coordSize.strip())
-                    #
-                    # if coordSize == 0:
-                    #     Logger().error("Errore parsing: file vuoto")
-                    #     return
-                    #
-                # count += 1
-                # f.readline()
-                # f.readline()
-                #
-                # leggo il primo numero
-                line = f.readline()
-                values = line.split(';')
-                x = int(values[0].strip())
-                y = int(values[1].strip())
-                maxPoint.setX(x)
-                maxPoint.setY(y)
-                minPoint.setX(x)
-                minPoint.setY(y)
-
-                points.append(maxPoint)
 
                 for line in f:
                     values = line.split(';')
                     x = int(values[0].strip())
                     y = int(values[1].strip())
                     p = Point(x, y)
-                    if p < minPoint:
-                        minPoint = p
-                    if p > maxPoint:
-                        maxPoint = p
-                    points.append(p)
-                    # count += 1
+                    if not set.addPoint(p):
+                        Logger().error("Errore nell'inserimento del punto ["+str(x)+","+str(y)+"] nel PointSet")
+                        return
 
         except OSError as err:
             Logger().error("Errore controllo file")
@@ -111,16 +77,19 @@ class Csv2FltConverter(object):
             Logger().error("Errore generico: il file csv potrebbe essere corrotto")
             return
 
-        points.sort()
-        # currentFilter.setNumberOfPoints(coordSize)
-        currentFilter.setNumberOfPoints(len(points))
-        currentFilter.setMin(minPoint)
-        currentFilter.setMax(maxPoint)
-        currentFilter.setPointList(points)
+        if set.size() == 0:
+            Logger().info("Il file .csv non contiene punti")
+            return
 
-        Logger().info("Numero punti: " + str(len(points)))
-        Logger().info("Punto Max: " + str(maxPoint.getX()) + "; " + str(maxPoint.getY()))
-        Logger().info("Punto Min: " + str(minPoint.getX()) + "; " + str(minPoint.getY()))
+        set.points.sort()
+        currentFilter.setNumberOfPoints(set.size())
+        currentFilter.setMin(set.getMin())
+        currentFilter.setMax(set.getMax())
+        currentFilter.setPointList(set.points)
+
+        Logger().info("Numero punti: " + str(currentFilter.getNumberOfPoints()))
+        Logger().info("Punto Min: " + str(currentFilter.getMin().getX()) + "; " + str(currentFilter.getMin().getY()))
+        Logger().info("Punto Max: " + str(currentFilter.getMax().getX()) + "; " + str(currentFilter.getMax().getY()))
 
 
         tempOutputJsonFile = destinationPath+"\\~"+fileName
