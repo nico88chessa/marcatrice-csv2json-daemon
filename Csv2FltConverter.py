@@ -42,6 +42,8 @@ class Csv2FltConverter(object):
 
         if os.path.exists(outputJsonFile):
             Logger().info("Il file " + outputJsonFile + " esiste gia'")
+            os.remove(filePath)
+            Logger().info("Rimosso file sorgente csv")
             return
 
         currentFilter = Filter()
@@ -106,3 +108,7 @@ class Csv2FltConverter(object):
         os.rename(tempOutputJsonFile, outputJsonFile)
 
         Logger().info("File json creato")
+
+        os.remove(filePath)
+
+        Logger().info("Rimosso file sorgente csv")
