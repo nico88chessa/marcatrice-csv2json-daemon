@@ -1,5 +1,7 @@
 from Point import Point
 from Filter import Filter
+from Settings import Settings
+from StripeFilter import StripeFilter
 from os import path
 import os
 import json
@@ -46,7 +48,6 @@ class Csv2FltConverter(object):
             Logger().info("Rimosso file sorgente csv")
             return
 
-        currentFilter = Filter()
         set = PointSet()
 
         try:
@@ -83,15 +84,13 @@ class Csv2FltConverter(object):
             Logger().info("Il file .csv non contiene punti")
             return
 
-        set.points.sort()
-        currentFilter.setNumberOfPoints(set.size())
-        currentFilter.setMin(set.getMin())
-        currentFilter.setMax(set.getMax())
-        currentFilter.setPointList(set.points)
+        Logger().info("Striping dell'insieme di punti")
+        currentStripeFilter = StripeFilter(Settings().getJsonConfigurationStripWidthUm())
+        currentStripeFilter.buildStripeFromPointSet(set)
 
-        Logger().info("Numero punti: " + str(currentFilter.getNumberOfPoints()))
-        Logger().info("BoundingBox - Min: " + str(currentFilter.getMin().getX()) + "; " + str(currentFilter.getMin().getY()))
-        Logger().info("BoundingBox - Max: " + str(currentFilter.getMax().getX()) + "; " + str(currentFilter.getMax().getY()))
+        Logger().info("Numero punti: " + str(currentStripeFilter.getNumberOfPoints()))
+        Logger().info("BoundingBox - Min: " + str(currentStripeFilter.getMin().getX()) + "; " + str(currentStripeFilter.getMin().getY()))
+        Logger().info("BoundingBox - Max: " + str(currentStripeFilter.getMax().getX()) + "; " + str(currentStripeFilter.getMax().getY()))
 
         tempOutputJsonFile = destinationPath+"\\~"+fileName
         tempOutputJsonFile = tempOutputJsonFile.replace(".csv", ".json")
@@ -101,7 +100,7 @@ class Csv2FltConverter(object):
         Logger().info("Inizio creazione file json")
 
         with open(tempOutputJsonFile, 'w') as outfile:
-            json.dump(currentFilter, outfile, indent=4, separators=(',', ': '), cls=MyJSONEncoder.FilterJSONEncoder)
+            json.dump(currentStripeFilter, outfile, indent=1, separators=(',', ': '), cls=MyJSONEncoder.FilterJSONEncoder)
 
         Logger().info("File json temporaneo creato")
 

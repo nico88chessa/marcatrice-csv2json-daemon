@@ -55,7 +55,7 @@ class MainWindow(QMainWindow):
 
     def setupUi(self):
         self.ui.setupUi(self)
-        self.setWindowTitle(Constants.PROGRAM_NAME + " - version " + str(Constants.CSV2JSON_VERSION))
+        self.setWindowTitle(Constants.PROGRAM_NAME + " - version " + Constants.CSV2JSON_VERSION)
         self.ui.cbLogger.setEnabled(False)
         self.ui.cbConverter.setEnabled(False)
         self.ui.leSourcePath.setText(Settings().getSpoolPath())

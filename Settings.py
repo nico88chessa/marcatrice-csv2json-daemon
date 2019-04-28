@@ -33,6 +33,9 @@ class Settings(metaclass=Singleton):
                 "levels": "CRITICAL, ERROR, WARNING, INFO, DEBUG, NOTSET",
                 "currentLevel": "DEBUG"
             }
+            config["JsonConfiguration"] = {
+                "StripWidthUm": "100000"
+            }
             with open(filepath, 'w') as fp:
                 config.write(fp)
 
@@ -48,6 +51,7 @@ class Settings(metaclass=Singleton):
         self.loggingFilename = config["Logging"]["filename"]
         self.loggingLevels = config["Logging"]["levels"]
         self.loggingCurrentLevel = config["Logging"]["currentLevel"]
+        self.jsonConfigurationStripWidthUm = config["JsonConfiguration"]["StripWidthUm"]
 
     def getStyleSheetPath(self):
         return self.styleSheetPath
@@ -78,3 +82,6 @@ class Settings(metaclass=Singleton):
 
     def getLoggingCurrentLevel(self):
         return self.loggingCurrentLevel
+
+    def getJsonConfigurationStripWidthUm(self):
+        return int(self.jsonConfigurationStripWidthUm)

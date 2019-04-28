@@ -1,9 +1,10 @@
 from BoundingBox import BoundingBox
 from Point import Point
 from Logger import Logger
+import MyJSONEncoder
 
 
-class PointSet:
+class PointSet(MyJSONEncoder.AbstractJSONEncoder):
 
     def __init__(self):
         self.points = []
@@ -28,3 +29,14 @@ class PointSet:
 
     def size(self):
         return len(self.points)
+
+    def decodeJson(self):
+        ret = {
+            "Points": str(self.size()),
+            "BoundingBox": {
+                "Min": self.getMin(),
+                "Max": self.getMax(),
+            },
+            "Coordinates": self.points
+        }
+        return ret
