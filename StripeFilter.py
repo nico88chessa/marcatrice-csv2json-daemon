@@ -76,6 +76,10 @@ class StripeFilter(MyJSONEncoder.AbstractJSONEncoder):
                 "Min": self.getMin(),
                 "Max": self.getMax()
             },
-            "Stripes": self.stripes
+            "Stripes": {
+                "Size": len(self.stripes),
+                "StripeWidthUm": self.stripeWidthUm,
+                "Data": self.stripes
+            }
         }
         return ret

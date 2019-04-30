@@ -32,11 +32,11 @@ class PointSet(MyJSONEncoder.AbstractJSONEncoder):
 
     def decodeJson(self):
         ret = {
-            "Points": str(self.size()),
+            "Points": self.size(),
             "BoundingBox": {
                 "Min": self.getMin(),
                 "Max": self.getMax(),
             },
-            "Coordinates": self.points
+            "Coordinate": self.points
         }
         return ret

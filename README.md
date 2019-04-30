@@ -19,6 +19,10 @@ per generare l'eseguibile bisogna dare i seguenti comandi:
 1. pyinstaller main.py (usanto il pyinstaller dell'ambiente virtuale)
 2. pyinstaller main.py (usanto il pyinstaller dell'ambiente di sistema)
 
+Possibile file batch
+.\venv\Scripts\pyinstaller main.py --distpath .\build\dist --workpath .\build\build
+pyinstaller main.py --distpath .\build\dist --workpath .\build\build
+
 Comandi utili
 
 il file di risorse e' stato creato da Qt Designer (View -> Resource Browser);
