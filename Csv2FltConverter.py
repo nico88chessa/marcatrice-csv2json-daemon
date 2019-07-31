@@ -75,9 +75,19 @@ class Csv2FltConverter(object):
             Logger().error("Errore controllo file")
             Logger().error("Codice errore: " + str(err.errno))
             Logger().error("Descrizione errore: " + err.strerror)
+            exceptionFile = destinationPath+"\\"+fileName+".failed"
+            f = open(exceptionFile, 'w')
+            f.write("Errore OSError nel caricamento/lettura del file\n")
+            f.write(str(err.errno)+" - "+err.strerror)
+            f.close()
             return
         except Exception as err:
             Logger().error("Errore generico: il file csv potrebbe essere corrotto")
+            exceptionFile = destinationPath + "\\" + fileName + ".failed"
+            f = open(exceptionFile, 'w')
+            f.write("Errore Exception nel caricamento/lettura del file\n")
+            f.write(str(err))
+            f.close()
             return
 
         if set.size() == 0:
@@ -85,8 +95,17 @@ class Csv2FltConverter(object):
             return
 
         Logger().info("Striping dell'insieme di punti")
-        currentStripeFilter = StripeFilter(Settings().getJsonConfigurationStripWidthUm())
-        currentStripeFilter.buildStripeFromPointSet(set)
+        try:
+            currentStripeFilter = StripeFilter(Settings().getJsonConfigurationStripWidthUm())
+            currentStripeFilter.buildStripeFromPointSet(set)
+        except Exception as err:
+            Logger().error("Eccezione non gestita: {0}".format(str(err)))
+            exceptionFile = destinationPath + "\\" + fileName + ".failed"
+            f = open(exceptionFile, 'w')
+            f.write("Errore nella creazione nel metodo StripeFilter.buildStripeFromPointSet\n")
+            f.write(str(err))
+            f.close()
+            return
 
         Logger().info("Numero punti: " + str(currentStripeFilter.getNumberOfPoints()))
         Logger().info("BoundingBox - Min: " + str(currentStripeFilter.getMin().getX()) + "; " + str(currentStripeFilter.getMin().getY()))

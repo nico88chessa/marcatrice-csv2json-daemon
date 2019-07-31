@@ -60,7 +60,7 @@ class StripeFilter(MyJSONEncoder.AbstractJSONEncoder):
 
         while len(ps.points) > 0:
             p = ps.points.pop()
-            listIndex = math.floor(p.getX() / self.stripeWidthUm)
+            listIndex = math.floor((p.getX() - self.minPoint.getX()) / self.stripeWidthUm)
             self.stripes[listIndex].addPoint(p)
 
     def clearAll(self):
