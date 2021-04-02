@@ -11,6 +11,7 @@ class StripeFilter(MyJSONEncoder.AbstractJSONEncoder):
         self.numberOfPoints = 0
         self.maxPoint = Point()
         self.minPoint = Point()
+        self.centerPoint = Point()
         self.stripes = list()
         self.stripeWidthUm = stripeWidthUm
 
@@ -25,6 +26,9 @@ class StripeFilter(MyJSONEncoder.AbstractJSONEncoder):
 
     def getMin(self):
         return self.minPoint
+
+    def getCenter(self):
+        return self.centerPoint
 
     def getStripe(self, index):
         if index >= len(self.stripes):
@@ -41,12 +45,18 @@ class StripeFilter(MyJSONEncoder.AbstractJSONEncoder):
         self.maxPoint = ps.getMax()
         self.numberOfPoints = len(ps.points)
 
+        minX = self.minPoint.getX()
+        minY = self.minPoint.getY()
+        maxY = self.maxPoint.getY()
+        maxX = self.maxPoint.getX()
+
+        self.centerPoint = Point(round((minX + maxX)/2), round((minY + maxY)/2))
+
         Logger().info("StripeFilter Min: " + str(self.minPoint.getX()) + "; " + str(self.minPoint.getY()))
         Logger().info("StripeFilter Max: " + str(self.maxPoint.getX()) + "; " + str(self.maxPoint.getY()))
+        Logger().info("StripeFilter Center: " + str(self.centerPoint.getX()) + "; " + str(self.centerPoint.getY()))
         Logger().info("StripeFilter Num. Points: " + str(self.numberOfPoints))
 
-        minX = self.minPoint.getX()
-        maxX = self.maxPoint.getX()
         currentPointSetX = minX
 
         canContinue = True
@@ -76,6 +86,7 @@ class StripeFilter(MyJSONEncoder.AbstractJSONEncoder):
                 "Min": self.getMin(),
                 "Max": self.getMax()
             },
+            "Center": self.getCenter(),
             "Stripes": {
                 "Size": len(self.stripes),
                 "StripeWidthUm": self.stripeWidthUm,

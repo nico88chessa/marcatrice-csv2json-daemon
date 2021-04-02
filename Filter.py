@@ -8,6 +8,7 @@ class Filter(MyJSONEncoder.AbstractJSONEncoder):
         self.numberOfPoints = 0
         self.maxPoint = Point()
         self.minPoint = Point()
+        self.centerPoint = Point()
         self.points = list()
 
     def getNumberOfPoints(self):
@@ -28,6 +29,12 @@ class Filter(MyJSONEncoder.AbstractJSONEncoder):
     def setMin(self, p):
         self.minPoint = p
 
+    def getCenter(self):
+        return self.centerPoint
+
+    def setCenter(self, p):
+        self.centerPoint = p
+
     def getPointList(self):
         return self.points
 
@@ -47,6 +54,7 @@ class Filter(MyJSONEncoder.AbstractJSONEncoder):
                 "Min": self.getMin(),
                 "Max": self.getMax()
             },
+            "Center": self.getCenter(),
             "Coordinate": self.getPointList()
         }
         return ret
