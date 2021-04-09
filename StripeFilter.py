@@ -14,6 +14,7 @@ class StripeFilter(MyJSONEncoder.AbstractJSONEncoder):
         self.centerPoint = Point()
         self.stripes = list()
         self.stripeWidthUm = stripeWidthUm
+        self.yMinDistance = 0
 
     def getNumberOfPoints(self):
         return self.numberOfPoints
@@ -34,6 +35,12 @@ class StripeFilter(MyJSONEncoder.AbstractJSONEncoder):
         if index >= len(self.stripes):
             return PointSet()
         return self.stripes[index]
+
+    def getYMinDistance(self):
+        return self.yMinDistance
+
+    def setYMinDistance(self, yMinDistance):
+        self.yMinDistance = yMinDistance
 
     def buildStripeFromPointSet(self, ps: PointSet):
 
@@ -68,10 +75,21 @@ class StripeFilter(MyJSONEncoder.AbstractJSONEncoder):
 
         Logger().info("StripeFilter Num. Stripe: " + str(len(self.stripes)))
 
+        isFirstPoint = True
+        previous = Point()
         while len(ps.points) > 0:
-            p = ps.points.pop()
-            listIndex = math.floor((p.getX() - self.minPoint.getX()) / self.stripeWidthUm)
-            self.stripes[listIndex].addPoint(p)
+            current = ps.points.pop()
+            listIndex = math.floor((current.getX() - self.minPoint.getX()) / self.stripeWidthUm)
+            self.stripes[listIndex].addPoint(current)
+            if isFirstPoint:
+                isFirstPoint = False
+            else:
+                yDistance = math.fabs(current.getY() - previous.getY())
+                if (current.getX() == previous.getX()):
+                    if (self.yMinDistance == 0 or yDistance < self.yMinDistance):
+                        self.yMinDistance = yDistance
+
+            previous = current
 
     def clearAll(self):
         self.numberOfPoints = 0
@@ -87,6 +105,7 @@ class StripeFilter(MyJSONEncoder.AbstractJSONEncoder):
                 "Max": self.getMax()
             },
             "Center": self.getCenter(),
+            "YMinDistance": self.getYMinDistance(),
             "Stripes": {
                 "Size": len(self.stripes),
                 "StripeWidthUm": self.stripeWidthUm,

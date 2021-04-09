@@ -10,6 +10,7 @@ class Filter(MyJSONEncoder.AbstractJSONEncoder):
         self.minPoint = Point()
         self.centerPoint = Point()
         self.points = list()
+        self.yMinDistance = 0
 
     def getNumberOfPoints(self):
         return self.numberOfPoints
@@ -47,6 +48,12 @@ class Filter(MyJSONEncoder.AbstractJSONEncoder):
     def clearPointList(self):
         self.points.clear()
 
+    def getYMinDistance(self):
+        return self.yMinDistance
+
+    def setYMinDistance(self, yMinDistance):
+        self.yMinDistance = yMinDistance
+
     def decodeJson(self):
         ret = {
             "NumberOfPoints": self.getNumberOfPoints(),
@@ -55,6 +62,7 @@ class Filter(MyJSONEncoder.AbstractJSONEncoder):
                 "Max": self.getMax()
             },
             "Center": self.getCenter(),
-            "Coordinate": self.getPointList()
+            "Coordinate": self.getPointList(),
+            "YMinDistance": self.getYMinDistance()
         }
         return ret
