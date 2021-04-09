@@ -84,7 +84,7 @@ class StripeFilter(MyJSONEncoder.AbstractJSONEncoder):
             if isFirstPoint:
                 isFirstPoint = False
             else:
-                yDistance = math.fabs(current.getY() - previous.getY())
+                yDistance = abs(current.getY() - previous.getY())
                 if (current.getX() == previous.getX()):
                     if (self.yMinDistance == 0 or yDistance < self.yMinDistance):
                         self.yMinDistance = yDistance
